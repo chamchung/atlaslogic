@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas Logic — Navigate to 170+</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #0A0A12;
+  --ink2:    #0F0F1C;
+  --ink3:    #16162A;
+  --violet:  #7C3AFF;
+  --violetL: #9D6FFF;
+  --violetD: rgba(124,58,255,0.12);
+  --violetB: rgba(124,58,255,0.28);
+  --cyan:    #00D4FF;
+  --cyanD:   rgba(0,212,255,0.10);
+  --cyanB:   rgba(0,212,255,0.28);
+  --gold:    #FFB81C;
+  --border:  rgba(255,255,255,0.07);
+  --borderM: rgba(255,255,255,0.13);
+  --text:    #EEEEFF;
+  --textS:   #8888AA;
+  --textM:   #4A4A6A;
+  --fs: 'Syne', sans-serif;
+  --fb: 'DM Sans', sans-serif;
+  --fm: 'DM Mono', monospace;
+  --fl: 'Cinzel', serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-family:var(--fb);font-size:15px;background:var(--ink);color:var(--text);-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(10,10,18,0.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:13px;text-decoration:none;}
+.logo-svg{width:88px;height:50px;display:block;border:none;background:transparent;--slot-border:transparent;}
+.logo-text{display:flex;flex-direction:column;line-height:1;}
+.logo-atlas{font-family:var(--fl);font-size:21px;font-weight:500;letter-spacing:.07em;color:var(--text);}
+.logo-logic{font-family:var(--fs);font-size:10.5px;font-weight:700;letter-spacing:.34em;color:var(--textS);margin-top:5px;padding-left:2px;text-transform:uppercase;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{color:var(--textS);text-decoration:none;font-size:13.5px;transition:color .15s;}
+.nav-links a:hover{color:var(--text);}
+.nav-right{display:flex;gap:10px;align-items:center;}
+.btn-ghost{background:transparent;border:1px solid var(--borderM);color:var(--textS);padding:8px 18px;border-radius:8px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;}
+.btn-ghost:hover{border-color:var(--violetB);color:var(--text);}
+.btn-violet{background:var(--violet);border:1px solid transparent;color:#fff;padding:8px 20px;border-radius:8px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;}
+.btn-violet:hover{background:var(--violetL);transform:translateY(-1px);}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
+#canvas3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero-fallback{position:absolute;right:8%;top:50%;transform:translateY(-50%);width:340px;max-width:42vw;z-index:0;display:none;animation:boatBob 5s ease-in-out infinite;}
+.hero-fallback svg{width:100%;height:auto;filter:drop-shadow(0 0 30px rgba(124,58,255,.35));}
+body.no-webgl #canvas3d{display:none;}
+body.no-webgl .hero-fallback{display:block;}
+@keyframes boatBob{0%,100%{transform:translateY(-50%) rotate(-2.5deg);}50%{transform:translateY(-58%) rotate(2.5deg);}}
+.hero-content{position:relative;z-index:10;max-width:600px;padding:120px 64px 80px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--cyanB);background:var(--cyanD);color:var(--cyan);padding:5px 14px;border-radius:100px;font-size:12px;font-weight:500;letter-spacing:.06em;margin-bottom:28px;}
+.dot-pulse{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:var(--fs);font-size:clamp(40px,5.5vw,66px);font-weight:800;line-height:1.05;letter-spacing:-.025em;margin-bottom:24px;}
+.h1-accent{color:var(--violetL);}
+.hero p{font-size:17px;font-weight:300;line-height:1.65;color:var(--textS);max-width:500px;margin-bottom:40px;}
+.hero-btns{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.btn-hero{background:var(--violet);border:none;color:#fff;padding:14px 26px;border-radius:10px;font-family:var(--fb);font-size:15px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s;}
+.btn-hero:hover{background:var(--violetL);transform:translateY(-1px);}
+.btn-hero-ghost{background:transparent;border:1px solid var(--borderM);color:var(--text);padding:14px 26px;border-radius:10px;font-family:var(--fb);font-size:15px;font-weight:300;cursor:pointer;transition:all .15s;}
+.btn-hero-ghost:hover{border-color:var(--borderM);background:var(--ink3);}
+.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--textM);font-size:11px;letter-spacing:.1em;animation:bounce 2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.scroll-hint svg{width:20px;height:20px;}
+
+/* stats strip */
+.stats-strip{background:var(--ink2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 64px;}
+.stats-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;}
+.stat-item .num{font-family:var(--fm);font-size:30px;font-weight:500;letter-spacing:-.02em;color:var(--text);}
+.stat-item .num span{font-size:16px;color:var(--violetL);}
+.stat-item .lbl{font-size:13px;color:var(--textS);margin-top:4px;}
+
+/* ── SECTION BASE ── */
+section{padding:96px 64px;}
+.inner{max-width:1100px;margin:0 auto;}
+.s-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--violetL);margin-bottom:16px;}
+.s-title{font-family:var(--fs);font-size:clamp(28px,3.5vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:14px;}
+.s-sub{font-size:16px;font-weight:300;color:var(--textS);max-width:480px;margin-bottom:56px;line-height:1.65;}
+
+/* ── PROBLEM CARDS ── */
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.problem-card{background:var(--ink3);border:0.5px solid var(--border);border-left:2.5px solid var(--violet);border-radius:12px;padding:28px;transition:all .2s;}
+.problem-card:hover{border-color:var(--violetB);transform:translateY(-3px);}
+.pc-icon{width:40px;height:40px;border-radius:10px;background:var(--violetD);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.pc-icon svg{width:20px;height:20px;stroke:var(--violetL);}
+.pc-title{font-family:var(--fs);font-size:17px;font-weight:700;margin-bottom:8px;}
+.pc-body{font-size:13.5px;color:var(--textS);line-height:1.6;}
+
+/* ── HOW IT WORKS ── */
+.how-step{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;}
+.how-step:last-child{margin-bottom:0;}
+.how-step.flip{direction:rtl;}
+.how-step.flip > *{direction:ltr;}
+.how-num{font-family:var(--fm);font-size:12px;color:var(--cyan);letter-spacing:.1em;margin-bottom:10px;}
+.how-title{font-family:var(--fs);font-size:28px;font-weight:700;letter-spacing:-.015em;margin-bottom:14px;}
+.how-body{font-size:15px;font-weight:300;color:var(--textS);line-height:1.7;margin-bottom:24px;}
+.how-tag{display:inline-block;padding:4px 12px;border-radius:5px;font-size:12px;font-weight:500;margin-right:8px;margin-bottom:8px;}
+.tag-v{background:var(--violetD);color:var(--violetL);border:1px solid var(--violetB);}
+.tag-c{background:var(--cyanD);color:var(--cyan);border:1px solid var(--cyanB);}
+.how-mock{background:var(--ink3);border:1px solid var(--borderM);border-radius:14px;padding:24px;font-size:13px;}
+.mock-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--textM);margin-bottom:14px;}
+.mock-bar-row{display:grid;grid-template-columns:130px 1fr auto;align-items:center;gap:12px;margin-bottom:12px;}
+.mock-bar-name{font-size:12px;color:var(--textS);}
+.mock-bar-bg{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;}
+.mock-bar-fill{height:100%;border-radius:2px;}
+.mock-badge{font-family:var(--fm);font-size:10px;padding:2px 7px;border-radius:3px;}
+
+/* ── MASTERY ── */
+.mastery-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.m-card{background:var(--ink3);border:0.5px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s;}
+.m-card:hover{border-color:var(--borderM);}
+.m-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.m-name{font-size:14px;font-weight:500;}
+.m-badge{font-family:var(--fm);font-size:10px;padding:3px 8px;border-radius:4px;letter-spacing:.04em;}
+.bd{background:var(--cyanD);color:var(--cyan);border:1px solid var(--cyanB);}
+.bg{background:rgba(255,184,28,.1);color:var(--gold);border:1px solid rgba(255,184,28,.3);}
+.bs{background:var(--ink2);color:var(--textS);border:1px solid var(--borderM);}
+.bb{background:var(--violetD);color:var(--violetL);border:1px solid var(--violetB);}
+.bl{opacity:.45;background:var(--ink2);color:var(--textM);border:1px solid var(--border);}
+.m-bar-bg{height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.m-bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.bfc{background:var(--cyan);}
+.bfg{background:var(--gold);}
+.bfv{background:var(--violet);}
+.bfd{background:var(--borderM);}
+.m-meta{font-family:var(--fm);font-size:11px;color:var(--textM);}
+
+/* ── PRICING ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;}
+.price-card{background:var(--ink3);border:0.5px solid var(--border);border-radius:16px;padding:32px;position:relative;transition:transform .2s;}
+.price-card:hover{transform:translateY(-4px);}
+.price-card.featured{border:1.5px solid var(--violetB);background:linear-gradient(160deg,rgba(124,58,255,.08) 0%,var(--ink3) 60%);}
+.featured-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--violet);color:#fff;font-size:11px;font-weight:600;padding:4px 16px;border-radius:100px;white-space:nowrap;letter-spacing:.04em;}
+.price-tier{font-family:var(--fs);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--textS);margin-bottom:12px;}
+.price-amount{font-family:var(--fm);font-size:40px;font-weight:500;letter-spacing:-.03em;margin-bottom:4px;}
+.price-amount sup{font-size:20px;vertical-align:top;margin-top:8px;color:var(--textS);}
+.price-period{font-size:12px;color:var(--textS);margin-bottom:24px;}
+.price-divider{height:0.5px;background:var(--border);margin-bottom:24px;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.price-features li{font-size:13.5px;color:var(--textS);display:flex;align-items:flex-start;gap:8px;}
+.price-features li::before{content:'→';color:var(--violetL);flex-shrink:0;font-size:13px;}
+.price-features li.dim{opacity:.5;}
+.price-features li.dim::before{color:var(--textM);}
+.price-cta{width:100%;padding:12px;border-radius:8px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:transparent;color:var(--text);}
+.price-cta:hover{border-color:var(--borderM);background:var(--ink2);}
+.price-cta.featured-cta{background:var(--violet);border-color:transparent;color:#fff;}
+.price-cta.featured-cta:hover{background:var(--violetL);}
+
+/* ── TESTIMONIALS ── */
+.testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.tcard{background:var(--ink3);border:0.5px solid var(--border);border-radius:12px;padding:28px;}
+.tquote{font-size:14.5px;font-style:italic;font-weight:300;color:var(--textS);line-height:1.7;margin-bottom:20px;}
+.tquote::before{content:'"';color:var(--violetL);font-size:28px;font-family:var(--fs);line-height:.8;display:block;margin-bottom:8px;}
+.tauthor{font-size:13px;font-weight:500;color:var(--text);}
+.tscore{font-family:var(--fm);font-size:12px;color:var(--cyan);margin-top:2px;}
+
+/* ── FINAL CTA ── */
+.final-cta{background:var(--ink2);text-align:center;position:relative;overflow:hidden;}
+.final-cta-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.04;pointer-events:none;}
+.final-cta .inner{position:relative;z-index:1;}
+.final-h{font-family:var(--fs);font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-.025em;margin-bottom:16px;}
+.final-sub{font-size:16px;font-weight:300;color:var(--textS);margin-bottom:40px;}
+.final-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+/* ── FOOTER ── */
+footer{background:var(--ink2);border-top:1px solid var(--border);padding:48px 64px 32px;}
+.footer-top{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand .fb-lockup{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
+.footer-brand .fb-mark{width:38px;height:30px;flex-shrink:0;}
+.footer-brand .logo-atlas{font-family:var(--fl);font-size:19px;font-weight:500;letter-spacing:.07em;color:var(--text);}
+.footer-brand .logo-logic{font-family:var(--fs);font-size:10px;font-weight:700;letter-spacing:.32em;color:var(--textS);margin-top:4px;text-transform:uppercase;}
+.footer-desc{font-size:13px;color:var(--textS);line-height:1.6;margin-top:12px;max-width:200px;}
+.footer-col h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--textM);margin-bottom:14px;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-col ul a{color:var(--textS);text-decoration:none;font-size:13px;transition:color .15s;}
+.footer-col ul a:hover{color:var(--text);}
+.footer-bottom{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:var(--textM);}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .hero-content{padding:100px 24px 60px;}
+  .stats-inner,.problem-grid,.how-step,.mastery-grid,.pricing-grid,.testimonial-grid{grid-template-columns:1fr;}
+  .how-step.flip{direction:ltr;}
+  section{padding:64px 24px;}
+  .stats-strip{padding:32px 24px;}
+  footer{padding:40px 24px 24px;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <img class="logo-svg" src="assets/sailboat-logo-mark.png" alt="Atlas Logic" style="object-fit:contain;width:88px;height:50px;">
+    <div class="logo-text">
+      <span class="logo-atlas">ATLAS</span>
+      <span class="logo-logic">LOGIC</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#problem">Curriculum</a></li>
+    <li><a href="#">Tutoring</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-ghost">Sign in</button>
+    <button class="btn-violet">Get started</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="canvas3d"></canvas>
+  <div class="hero-fallback" aria-hidden="true">
+    <svg viewBox="0 0 200 150" fill="none">
+      <path d="M108,62 C102,81 96,99 92,108 L103,106 C105,90 107,76 108,62 Z" fill="#EFEFFF"/>
+      <path d="M131,41 C120,58 108,89 103,108 L126,104 C130,82 131,61 131,41 Z" fill="#EFEFFF"/>
+      <path d="M44,122 C86,110 142,107 172,92" stroke="#9D6FFF" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+      <path d="M44,122 C76,129 132,127 172,92" stroke="#9D6FFF" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="dot-pulse"></span>Now in beta · 200+ students enrolled</div>
+    <h1>Navigate to <span class="h1-accent">170+</span> with logic, not luck.</h1>
+    <p>Atlas Logic combines adaptive curriculum, error-pattern coaching, and personalized study infrastructure — so you understand <em>why</em> you miss questions, not just which ones.</p>
+    <div class="hero-btns">
+      <button class="btn-hero">
+        Start free diagnostic
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+      <button class="btn-hero-ghost">View curriculum →</button>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 4v12M5 11l5 5 5-5"/></svg>
+    scroll
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="num">+11<span>pt</span></div><div class="lbl">avg. score improvement</div></div>
+    <div class="stat-item"><div class="num">94<span>%</span></div><div class="lbl">students hit target score</div></div>
+    <div class="stat-item"><div class="num">4.8<span>/5</span></div><div class="lbl">tutor satisfaction rating</div></div>
+    <div class="stat-item"><div class="num">48<span>hr</span></div><div class="lbl">avg. hours to first mastery</div></div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem" style="background:var(--ink2);">
+  <div class="inner">
+    <div class="s-label reveal">Why students fail</div>
+    <h2 class="s-title reveal">Most LSAT prep is broken by design.</h2>
+    <p class="s-sub reveal">The platforms that exist were built around content delivery. Atlas is built around learning.</p>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="pc-icon"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M10 2v8M6 10l4 4 4-4M4 18h12"/></svg></div>
+        <div class="pc-title">Passive studying</div>
+        <div class="pc-body">Watching videos and re-reading notes feels productive. It isn't. Real learning requires active retrieval and structured reflection — not consumption.</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="pc-icon"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M3 5h14M3 10h8M3 15h5"/></svg></div>
+        <div class="pc-title">No structure</div>
+        <div class="pc-body">Random drilling is the enemy of improvement. Without a coherent curriculum sequence, students repeat mistakes and never build the underlying logic skills.</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="pc-icon"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/></svg></div>
+        <div class="pc-title">No accountability</div>
+        <div class="pc-body">Between tutoring sessions, most students drift. Atlas tracks every missed question, every pattern, every week — and your tutor sees all of it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="inner">
+    <div class="s-label reveal">How it works</div>
+    <h2 class="s-title reveal">Three stages. One system.</h2>
+    <p class="s-sub reveal">From your baseline diagnostic to your test day warmup — Atlas manages the entire arc.</p>
+
+    <div class="how-step reveal">
+      <div>
+        <div class="how-num">01 — DIAGNOSTIC & PLANNING</div>
+        <h3 class="how-title">Know where you start. Know where you're going.</h3>
+        <p class="how-body">Import your LawHub scores or take a fresh diagnostic. Atlas analyzes your question-type accuracy, timing, and confidence calibration — then generates a week-by-week plan to your target score.</p>
+        <span class="how-tag tag-c">LawHub integration</span>
+        <span class="how-tag tag-v">Adaptive calendar</span>
+        <span class="how-tag tag-c">Goal tracking</span>
+      </div>
+      <div class="how-mock">
+        <div class="mock-label">Diagnostic results — Jordan M.</div>
+        <div class="mock-bar-row"><div class="mock-bar-name">Must Be True</div><div class="mock-bar-bg"><div class="mock-bar-fill bfc" style="width:94%"></div></div><span class="mock-badge bd">94%</span></div>
+        <div class="mock-bar-row"><div class="mock-bar-name">Strengthen</div><div class="mock-bar-bg"><div class="mock-bar-fill bfg" style="width:82%"></div></div><span class="mock-badge bg">82%</span></div>
+        <div class="mock-bar-row"><div class="mock-bar-name">Sufficient Assumption</div><div class="mock-bar-bg"><div class="mock-bar-fill bfv" style="width:42%"></div></div><span class="mock-badge bb" style="font-size:10px;">42%</span></div>
+        <div style="margin-top:14px;padding:10px;background:rgba(0,212,255,.06);border:1px solid var(--cyanB);border-radius:7px;font-size:12px;color:var(--cyan);">Plan generated: 12 weeks · Test date Aug 7 · 47 days remaining</div>
+      </div>
+    </div>
+
+    <div class="how-step flip reveal">
+      <div>
+        <div class="how-num">02 — STRUCTURED DRILLING</div>
+        <h3 class="how-title">Every drill has a reason. Every miss has a lesson.</h3>
+        <p class="how-body">Each question type gets its own curriculum: concept video, guided walkthrough, untimed drill, timed drill, blind review. The error log captures not just what you missed — but why, and what the pattern is.</p>
+        <span class="how-tag tag-v">Error log</span>
+        <span class="how-tag tag-v">Pattern detection</span>
+        <span class="how-tag tag-c">Blind review</span>
+      </div>
+      <div class="how-mock">
+        <div class="mock-label">Error log entry</div>
+        <div style="border-left:2.5px solid var(--gold);padding:10px 14px;background:rgba(255,184,28,.05);border-radius:4px;font-size:12.5px;line-height:1.5;">
+          <div style="color:var(--gold);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Sufficient Assumption · PT78 S2 Q14</div>
+          <div style="color:var(--textS);margin-bottom:6px;"><strong style="color:var(--text);">Why I chose (D):</strong> The contrapositive felt like it supported the conclusion.</div>
+          <div style="color:var(--textS);"><strong style="color:var(--text);">Why (B) is right:</strong> Only (B) guarantees the conclusion — (D) merely makes it more likely.</div>
+          <div style="margin-top:8px;"><span style="background:rgba(255,184,28,.1);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:4px;">scope shift</span> <span style="background:rgba(255,184,28,.1);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:4px;">causal confusion</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="how-step reveal">
+      <div>
+        <div class="how-num">03 — COACHING & REVIEW</div>
+        <h3 class="how-title">Your tutor sees everything. Every session is prepared.</h3>
+        <p class="how-body">Before every session, your tutor receives an auto-generated brief: your top three error patterns, homework status, and calibration flags. No time is wasted. Every minute is on the thing that matters most.</p>
+        <span class="how-tag tag-c">Session prep brief</span>
+        <span class="how-tag tag-v">Homework assignment</span>
+        <span class="how-tag tag-c">Test-week protocol</span>
+      </div>
+      <div class="how-mock">
+        <div class="mock-label">Pre-session brief — Maya R. → Jordan M.</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:8px 12px;background:var(--violetD);border:1px solid var(--violetB);border-radius:7px;color:var(--violetL);">Top pattern: Sufficient Assumption overconfidence (8/12 missed as "certain")</div>
+          <div style="padding:8px 12px;background:var(--cyanD);border:1px solid var(--cyanB);border-radius:7px;color:var(--cyan);">Homework: ✓ Completed · Error log: 12 new entries</div>
+          <div style="padding:8px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;color:var(--textS);">Suggested focus: Negation test + scope shift drill</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MASTERY -->
+<section style="background:var(--ink2);">
+  <div class="inner">
+    <div class="s-label reveal">Mastery tracking</div>
+    <h2 class="s-title reveal">Know exactly where you stand — always.</h2>
+    <p class="s-sub reveal">Mastery updates in real time based on accuracy and confidence calibration. Not question count. Not time spent. Actual understanding.</p>
+    <div class="mastery-grid">
+      <div class="m-card reveal"><div class="m-top"><div class="m-name">Must Be True</div><div class="m-badge bd">DIAMOND</div></div><div class="m-bar-bg"><div class="m-bar-fill bfc" data-width="96"></div></div><div class="m-meta">96% accuracy · 42 questions</div></div>
+      <div class="m-card reveal"><div class="m-top"><div class="m-name">Strengthen</div><div class="m-badge bg">GOLD</div></div><div class="m-bar-bg"><div class="m-bar-fill bfg" data-width="82"></div></div><div class="m-meta">82% accuracy · 38 questions</div></div>
+      <div class="m-card reveal"><div class="m-top"><div class="m-name">Necessary Assumption</div><div class="m-badge bs">SILVER</div></div><div class="m-bar-bg"><div class="m-bar-fill bfv" data-width="64"></div></div><div class="m-meta">64% accuracy · 29 questions</div></div>
+      <div class="m-card reveal"><div class="m-top"><div class="m-name">Sufficient Assumption</div><div class="m-badge bb">BRONZE</div></div><div class="m-bar-bg"><div class="m-bar-fill bfv" data-width="42"></div></div><div class="m-meta">42% accuracy · 21 questions · active focus</div></div>
+      <div class="m-card reveal"><div class="m-top"><div class="m-name">Flaw Recognition</div><div class="m-badge bs">SILVER</div></div><div class="m-bar-bg"><div class="m-bar-fill bfv" data-width="70"></div></div><div class="m-meta">70% accuracy · 33 questions</div></div>
+      <div class="m-card reveal"><div class="m-top"><div class="m-name">Method / Role</div><div class="m-badge bl">LOCKED</div></div><div class="m-bar-bg"><div class="m-bar-fill bfd" data-width="8"></div></div><div class="m-meta">Unlocks after Flaw checkpoint</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="inner">
+    <div class="s-label reveal">Pricing</div>
+    <h2 class="s-title reveal">Choose your level of support.</h2>
+    <p class="s-sub reveal">Every tier includes the full curriculum and error log system. The difference is how much human coaching is in your corner.</p>
+    <div class="pricing-grid reveal">
+      <div class="price-card">
+        <div class="price-tier">Self-Paced</div>
+        <div class="price-amount"><sup>$</sup>59</div>
+        <div class="price-period">per month · cancel anytime</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Full 5-stage curriculum</li>
+          <li>Adaptive study calendar</li>
+          <li>Error log + pattern detection</li>
+          <li>Mastery tracking</li>
+          <li class="dim">1:1 tutoring sessions</li>
+          <li class="dim">Admissions consulting</li>
+        </ul>
+        <button class="price-cta">Get started</button>
+      </div>
+      <div class="price-card featured">
+        <div class="featured-badge">Most popular</div>
+        <div class="price-tier">Coached</div>
+        <div class="price-amount"><sup>$</sup>249</div>
+        <div class="price-period">per month · cancel anytime</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Everything in Self-Paced</li>
+          <li>2 hours/month 1:1 tutoring</li>
+          <li>Tutor-reviewed error log</li>
+          <li>Custom homework assignments</li>
+          <li>Session prep briefs</li>
+          <li class="dim">Admissions consulting</li>
+        </ul>
+        <button class="price-cta featured-cta">Get started</button>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Intensive</div>
+        <div class="price-amount"><sup>$</sup>899</div>
+        <div class="price-period">per month · cancel anytime</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Everything in Coached</li>
+          <li>8 hours/month 1:1 tutoring</li>
+          <li>Priority test-week support</li>
+          <li>Admissions consulting check-ins</li>
+          <li>Retake analysis</li>
+          <li>Direct tutor messaging</li>
+        </ul>
+        <button class="price-cta">Get started</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="background:var(--ink2);">
+  <div class="inner">
+    <div class="s-label reveal">Results</div>
+    <h2 class="s-title reveal">Students who understand the why.</h2>
+    <p class="s-sub reveal"></p>
+    <div class="testimonial-grid">
+      <div class="tcard reveal">
+        <div class="tquote">Atlas changed how I think about arguments, not just how I answer questions. I finally understand why I was missing Sufficient Assumption — and I haven't missed one in three weeks.</div>
+        <div class="tauthor">Priya M., Columbia Law '27</div>
+        <div class="tscore">158 → 171 · 13 point improvement</div>
+      </div>
+      <div class="tcard reveal">
+        <div class="tquote">The error log alone is worth the subscription. My tutor could see exactly what I was thinking on every miss before our session even started. Best tutoring experience I've had.</div>
+        <div class="tauthor">Marcus T., NYU Law '27</div>
+        <div class="tscore">161 → 172 · 11 point improvement</div>
+      </div>
+      <div class="tcard reveal">
+        <div class="tquote">I studied with Kaplan for 4 months and went up 2 points. Two months with Atlas and I'm up 9. The structure is completely different — every day I know exactly what to do and why.</div>
+        <div class="tauthor">Danielle R., Georgetown Law '27</div>
+        <div class="tscore">155 → 164 · 9 point improvement</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+    <img class="final-cta-bg" src="assets/sailboat-logo-mark.png" alt="" aria-hidden="true" style="width:560px;height:auto;object-fit:contain;">
+  <div class="inner">
+    <div class="s-label" style="text-align:center;display:block;">Ready to start</div>
+    <h2 class="final-h">Your path to 170+ starts here.</h2>
+    <p class="final-sub">Take the free diagnostic. See your personalized plan. No credit card required.</p>
+    <div class="final-btns">
+      <button class="btn-hero">Start free diagnostic →</button>
+      <button class="btn-hero-ghost">Talk to a tutor</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="fb-lockup">
+        <img class="fb-mark" src="assets/sailboat-logo-mark.png" alt="Atlas Logic" style="object-fit:contain;">
+        <div>
+          <div class="logo-atlas">ATLAS</div>
+          <div class="logo-logic">LOGIC</div>
+        </div>
+      </div>
+      <div class="footer-desc">A logic-first LSAT preparation ecosystem for the next generation of law students.</div>
+    </div>
+    <div class="footer-col"><h4>Product</h4><ul><li><a href="#">Curriculum</a></li><li><a href="#">Error Log</a></li><li><a href="#">Tutoring</a></li><li><a href="#">Analytics</a></li></ul></div>
+    <div class="footer-col"><h4>Learn</h4><ul><li><a href="#">Stage 1: Foundations</a></li><li><a href="#">Stage 2: LR Types</a></li><li><a href="#">Stage 3: RC</a></li><li><a href="#">Test Week</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Tutors</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li></ul></div>
+    <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Cookies</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Atlas Logic. All rights reserved.</span>
+    <span>Electric Intellect palette · Refinement 2 mark</span>
+  </div>
+</footer>
+
+
+<!-- THREE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   3D SAILBOAT SCENE — Three.js r128
+   ═══════════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('canvas3d');
+  const hero   = canvas.parentElement;
+
+  // WebGL fallback -> CSS class on body
+  let gl;
+  try { gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); } catch(err) {}
+  if (!gl) { document.body.classList.add('no-webgl'); return; }
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 220);
+  camera.position.set(0, 1.8, 7);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+
+  function resize() {
+    const w = hero.offsetWidth, h = hero.offsetHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // ── LIGHTS (moonlit night) ──
+  const ambient = new THREE.AmbientLight(0x222244, 0.72);
+  scene.add(ambient);
+  const moonLight = new THREE.DirectionalLight(0xbcd0ff, 1.15);
+  moonLight.position.set(-6, 7, 3);
+  scene.add(moonLight);
+  const violetLight = new THREE.PointLight(0x7C3AFF, 0.85, 14);
+  violetLight.position.set(1.4, 0.6, 2.5);
+  scene.add(violetLight);
+  const cyanLight = new THREE.DirectionalLight(0x00D4FF, 0.16);
+  cyanLight.position.set(3, 2, 4);
+  scene.add(cyanLight);
+
+  // ── soft round textures ──
+  function radialTex(stops) {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const g = c.getContext('2d');
+    const grd = g.createRadialGradient(32,32,0,32,32,32);
+    stops.forEach(s => grd.addColorStop(s[0], s[1]));
+    g.fillStyle = grd; g.fillRect(0,0,64,64);
+    return new THREE.CanvasTexture(c);
+  }
+  const starTex = radialTex([[0,'rgba(255,255,255,1)'],[0.25,'rgba(255,255,255,0.85)'],[0.55,'rgba(200,212,255,0.3)'],[1,'rgba(255,255,255,0)']]);
+  const glowWhite = radialTex([[0,'rgba(255,255,255,0.9)'],[0.3,'rgba(230,238,255,0.35)'],[1,'rgba(255,255,255,0)']]);
+  const glowMoon  = radialTex([[0,'rgba(196,210,255,0.55)'],[0.28,'rgba(170,190,255,0.22)'],[1,'rgba(160,180,255,0)']]);
+
+  // ── STARFIELD (two depth layers) ──
+  function makeStars(count, spreadX, spreadY, yMin, zBase, size, opacity) {
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(count*3);
+    for (let i=0;i<count*3;i+=3){
+      pos[i]   = (Math.random()-0.5)*spreadX;
+      pos[i+1] = yMin + Math.random()*spreadY;
+      pos[i+2] = zBase - Math.random()*30;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+    const mat = new THREE.PointsMaterial({ map:starTex, size, transparent:true, opacity, depthWrite:false, blending:THREE.AdditiveBlending, color:0xffffff, sizeAttenuation:true });
+    return new THREE.Points(geo, mat);
+  }
+  const stars1 = makeStars(460, 90, 26, 2.5, -16, 0.5, 0.9);
+  const stars2 = makeStars(240, 70, 22, 5,   -10, 0.9, 0.7);
+  scene.add(stars1); scene.add(stars2);
+
+  // ── MOON ──
+  const moonGroup = new THREE.Group();
+  moonGroup.position.set(-10.5, 6.6, -26);
+  scene.add(moonGroup);
+  const moon = new THREE.Mesh(
+    new THREE.SphereGeometry(1.55, 48, 48),
+    new THREE.MeshStandardMaterial({ color:0xf2f2ff, emissive:0xc6d0f4, emissiveIntensity:1.12, roughness:1, metalness:0 })
+  );
+  moonGroup.add(moon);
+  const moonGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map:glowMoon, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0.9 }));
+  moonGlow.scale.set(13,13,1);
+  moonGroup.add(moonGlow);
+
+  // ── CONSTELLATION (custom, upper-right) ──
+  const cPts = [[3.4,9.2],[4.9,10.6],[6.5,9.7],[7.5,11.1],[8.9,10.3],[6.6,8.0],[8.3,7.3]]
+    .map(p => new THREE.Vector3(p[0], p[1], -19));
+  const cLinks = [[0,1],[1,2],[2,3],[3,4],[2,5],[5,6]];
+  scene.add(new THREE.Points(
+    new THREE.BufferGeometry().setFromPoints(cPts),
+    new THREE.PointsMaterial({ map:starTex, size:1.25, transparent:true, opacity:1, depthWrite:false, blending:THREE.AdditiveBlending, color:0xe3e9ff })
+  ));
+  const clp = [];
+  cLinks.forEach(l => { clp.push(cPts[l[0]], cPts[l[1]]); });
+  const constLine = new THREE.LineSegments(
+    new THREE.BufferGeometry().setFromPoints(clp),
+    new THREE.LineBasicMaterial({ color:0x93a4dc, transparent:true, opacity:0.3 })
+  );
+  scene.add(constLine);
+
+  // ── OCEAN ──
+  const OCEAN_W = 46, OCEAN_H = 46, SEG = 150;
+  const oceanGeo = new THREE.PlaneGeometry(OCEAN_W, OCEAN_H, SEG, SEG);
+  oceanGeo.rotateX(-Math.PI / 2);
+  const oceanMat = new THREE.MeshPhongMaterial({
+    color: 0x070f24, specular: 0x6f86e6, shininess: 165, emissive: 0x03061a,
+    transparent: true, opacity: 0.97, side: THREE.DoubleSide
+  });
+  const ocean = new THREE.Mesh(oceanGeo, oceanMat);
+  ocean.position.y = -0.92;
+  scene.add(ocean);
+
+  // crest highlight lines (cyan) — a second wireframe-ish layer that follows crests
+  const crestMat = new THREE.MeshPhongMaterial({ color:0x0c2a4a, emissive:0x00557a, emissiveIntensity:0.0, transparent:true, opacity:0.0, side:THREE.DoubleSide });
+
+  // ── MOON REFLECTION (moonglade) ──
+  // Broken, shimmering column of light that widens toward the viewer and
+  // concentrates into a bright disc near the moon end.
+  function reflectionCanvas(){
+    const W=64, H=256;
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    for (let y=0;y<H;y++){
+      const yn = y/H;                              // 0 = far (moon), 1 = near (viewer)
+      const fade = Math.sin(yn*Math.PI);           // dim at both ends
+      const disc = Math.exp(-Math.pow((yn-0.10)/0.12,2)); // bright moon-disc near far end
+      // horizontal ripple breakup that shifts with depth
+      const band = 0.30 + 0.70*Math.pow(Math.abs(Math.sin(y*0.42 + Math.sin(y*0.11)*1.6)), 1.3);
+      const widthN = 0.35 + 0.65*yn;               // glade widens toward viewer
+      for (let x=0;x<W;x++){
+        const xc = (x/W - 0.5)/ (widthN*0.5);      // -1..1 across current width
+        if (Math.abs(xc) > 1) { g.clearRect(x,y,1,1); continue; }
+        const xf = Math.pow(Math.cos(xc*Math.PI*0.5), 1.6);
+        const a = Math.min(1, fade*band*xf*0.85 + disc*xf*0.9);
+        g.fillStyle = 'rgba(206,218,255,'+a.toFixed(3)+')';
+        g.fillRect(x,y,1,1);
+      }
+    }
+    return c;
+  }
+  const reflTex = new THREE.CanvasTexture(reflectionCanvas());
+  reflTex.wrapS = reflTex.wrapT = THREE.RepeatWrapping;
+  const reflGeo = new THREE.PlaneGeometry(5.0, 15, 1, 1);
+  reflGeo.rotateX(-Math.PI/2);
+  const reflMat = new THREE.MeshBasicMaterial({ map:reflTex, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0.85 });
+  const reflection = new THREE.Mesh(reflGeo, reflMat);
+  reflection.position.set(-4.6, -0.78, -0.5);
+  reflection.rotation.y = 0.16;
+  scene.add(reflection);
+
+  // ── GALAXY GLOW REFLECTION (under the boat / bright sky) ──
+  function galaxyReflCanvas(){
+    const W=64, H=256; const c=document.createElement('canvas'); c.width=W;c.height=H;
+    const g=c.getContext('2d');
+    for (let y=0;y<H;y++){
+      const yn=y/H, fade=Math.sin(yn*Math.PI);
+      const band=0.4+0.6*Math.abs(Math.sin(y*0.5+Math.sin(y*0.2)));
+      for (let x=0;x<W;x++){
+        const xf=Math.pow(Math.sin((x/W)*Math.PI),1.5);
+        const a=fade*band*xf*0.5;
+        g.fillStyle='rgba(150,170,255,'+a.toFixed(3)+')';
+        g.fillRect(x,y,1,1);
+      }
+    }
+    return c;
+  }
+  const galReflTex = new THREE.CanvasTexture(galaxyReflCanvas());
+  galReflTex.wrapS = galReflTex.wrapT = THREE.RepeatWrapping;
+  const galReflGeo = new THREE.PlaneGeometry(2.4, 11, 1, 1);
+  galReflGeo.rotateX(-Math.PI/2);
+  const galReflMat = new THREE.MeshBasicMaterial({ map:galReflTex, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0.4 });
+  const galReflection = new THREE.Mesh(galReflGeo, galReflMat);
+  galReflection.position.set(1.3, -0.74, -1.6);
+  scene.add(galReflection);
+
+  // bright reflected-moon glow sitting on the waterline under the moon
+  const moonReflGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map:glowMoon, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0.85 }));
+  moonReflGlow.scale.set(4.2, 2.2, 1);
+  moonReflGlow.position.set(-4.7, -0.86, 1.2);
+  scene.add(moonReflGlow);
+
+  // ── SHOOTING STAR ──
+  const ssGeo = new THREE.BufferGeometry();
+  ssGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
+  const ssMat = new THREE.LineBasicMaterial({ color:0xffffff, transparent:true, opacity:0, blending:THREE.AdditiveBlending });
+  const shootingStar = new THREE.Line(ssGeo, ssMat);
+  scene.add(shootingStar);
+  const ssHead = new THREE.Sprite(new THREE.SpriteMaterial({ map:glowWhite, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0 }));
+  ssHead.scale.set(1.1,1.1,1);
+  scene.add(ssHead);
+  let ssActive=false, ssT=0, ssNext=2.5+Math.random()*3;
+  const ssStart=new THREE.Vector3(), ssDir=new THREE.Vector3();
+  function triggerSS(){
+    ssActive=true; ssT=0;
+    ssStart.set(5+Math.random()*7, 8.5+Math.random()*3.5, -17-Math.random()*7);
+    ssDir.set(-1.7-Math.random()*0.5, -0.7-Math.random()*0.35, 0).normalize();
+  }
+
+  // ── SAILBOAT ──
+  const boat = new THREE.Group();
+  scene.add(boat);
+  function boatTargetX() { return hero.offsetWidth < 900 ? 0 : 1.5; }
+  boat.position.x = boatTargetX();
+  boat.scale.setScalar(0.6);
+
+  const hullMat = new THREE.MeshPhongMaterial({ color:0x0f0f24, specular:0x5566bb, shininess:80 });
+  const deckMat = new THREE.MeshPhongMaterial({ color:0x191934, specular:0x6677cc, shininess:60 });
+  const sparMat = new THREE.MeshPhongMaterial({ color:0xC6C6DC, shininess:70 });
+
+  // Hull — extruded side profile, raked bow at +x
+  const hullShape = new THREE.Shape();
+  hullShape.moveTo(-1.28, 0.16);
+  hullShape.lineTo(1.42, 0.10);
+  hullShape.quadraticCurveTo(1.66, -0.02, 1.40, -0.20);
+  hullShape.quadraticCurveTo(0.45, -0.54, -0.45, -0.52);
+  hullShape.quadraticCurveTo(-1.16, -0.50, -1.32, -0.18);
+  hullShape.lineTo(-1.28, 0.16);
+  const hullGeo = new THREE.ExtrudeGeometry(hullShape, { depth:0.62, bevelEnabled:true, bevelSize:0.06, bevelThickness:0.05, bevelSegments:3 });
+  hullGeo.translate(0, 0, -0.31);
+  const hull = new THREE.Mesh(hullGeo, hullMat);
+  hull.position.y = -0.60;
+  boat.add(hull);
+
+  // Deck cap (pointed top-view plane)
+  const deckShape = new THREE.Shape();
+  deckShape.moveTo(-1.24, 0.30);
+  deckShape.quadraticCurveTo(1.05, 0.30, 1.5, 0);
+  deckShape.quadraticCurveTo(1.05, -0.30, -1.24, -0.30);
+  deckShape.quadraticCurveTo(-1.40, 0, -1.24, 0.30);
+  const deckGeo = new THREE.ShapeGeometry(deckShape);
+  deckGeo.rotateX(-Math.PI/2);
+  const deck = new THREE.Mesh(deckGeo, deckMat);
+  deck.position.y = -0.30;
+  boat.add(deck);
+
+  // small cabin
+  const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.2, 0.42), deckMat);
+  cabin.position.set(-0.35, -0.18, 0);
+  boat.add(cabin);
+
+  // rig group
+  const rig = new THREE.Group();
+  rig.position.y = -0.28;
+  boat.add(rig);
+
+  // Mast + boom
+  const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.034, 3.5, 10), sparMat);
+  mast.position.set(-0.05, 1.5, 0);
+  rig.add(mast);
+  const boom = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.55, 8), sparMat);
+  boom.rotation.z = Math.PI/2;
+  boom.position.set(-0.55, 0.16, 0);
+  rig.add(boom);
+
+  // Billowing sail builder (grid mesh, tapers to apex, bows in z)
+  function makeSail(height, baseW, lean, billow, color, opacity) {
+    const ROWS=16, COLS=12;
+    const verts=[], idx=[];
+    for (let r=0;r<=ROWS;r++){
+      const v=r/ROWS, y=v*height, w=baseW*(1-v), lx=lean*v;
+      for (let c=0;c<=COLS;c++){
+        const u=c/COLS;
+        const x = lx - u*w;                 // chord extends toward -x (aft)
+        const z = Math.sin(u*Math.PI) * billow * (1 - v*0.55);
+        verts.push(x, y, z);
+      }
+    }
+    for (let r=0;r<ROWS;r++) for (let c=0;c<COLS;c++){
+      const a=r*(COLS+1)+c, b=a+1, d=a+(COLS+1), e2=d+1;
+      idx.push(a,d,b, b,d,e2);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(verts,3));
+    geo.setIndex(idx); geo.computeVertexNormals();
+    const mat = new THREE.MeshPhongMaterial({ color, specular:0x6677cc, shininess:16, transparent:true, opacity, side:THREE.DoubleSide, emissive:0x10101f, emissiveIntensity:0.3 });
+    return new THREE.Mesh(geo, mat);
+  }
+
+  // Main sail (aft of mast)
+  const mainSail = makeSail(2.8, 0.96, 0.40, 0.08, 0xEFEFFF, 0.96);
+  mainSail.position.set(0.0, 0.12, 0);
+  rig.add(mainSail);
+
+  // Jib (smaller, in front of mast toward bow) — same lean as main
+  const jib = makeSail(1.85, 0.54, 0.30, 0.05, 0xE2E6FF, 0.92);
+  jib.position.set(0.46, 0.12, 0.02);
+  rig.add(jib);
+
+  // ── SAIL BATTENS (horizontal seam lines on the main sail) ──
+  function battenLine(v){
+    const height=2.8, baseW=0.96, lean=0.40, billow=0.08, COLS=14;
+    const pts=[];
+    const y=v*height, w=baseW*(1-v), lx=lean*v;
+    for (let c=0;c<=COLS;c++){
+      const u=c/COLS;
+      const x = lx - u*w;
+      const z = Math.sin(u*Math.PI)*billow*(1 - v*0.55);
+      pts.push(new THREE.Vector3(x, y, z+0.004));
+    }
+    return pts;
+  }
+  const battenMat = new THREE.LineBasicMaterial({ color:0xb9bfe0, transparent:true, opacity:0.32 });
+  [0.22,0.44,0.66].forEach(v => {
+    const bl = new THREE.Line(new THREE.BufferGeometry().setFromPoints(battenLine(v)), battenMat);
+    mainSail.add(bl);
+  });
+
+  // ── STANDING RIGGING (forestay, backstay, shrouds) ──
+  const mastTop = new THREE.Vector3(-0.05, 3.2, 0);
+  const rigPts = [
+    mastTop, new THREE.Vector3( 1.45, -0.02,  0),    // forestay → bow
+    mastTop, new THREE.Vector3(-1.25, -0.02,  0),    // backstay → stern
+    mastTop, new THREE.Vector3(-0.05, -0.02,  0.30), // shroud (starboard)
+    mastTop, new THREE.Vector3(-0.05, -0.02, -0.30), // shroud (port)
+  ];
+  const rigging = new THREE.LineSegments(
+    new THREE.BufferGeometry().setFromPoints(rigPts),
+    new THREE.LineBasicMaterial({ color:0xC6C6DC, transparent:true, opacity:0.42 })
+  );
+  rig.add(rigging);
+
+  // ── MASTHEAD BURGEE (small pennant) ──
+  const burgeeShape = new THREE.Shape();
+  burgeeShape.moveTo(0, 0);
+  burgeeShape.lineTo(0.42, 0.05);
+  burgeeShape.lineTo(0, 0.16);
+  burgeeShape.lineTo(0, 0);
+  const burgee = new THREE.Mesh(
+    new THREE.ShapeGeometry(burgeeShape),
+    new THREE.MeshBasicMaterial({ color:0x9D6FFF, transparent:true, opacity:0.9, side:THREE.DoubleSide })
+  );
+  burgee.position.set(-0.05, 3.16, 0);
+  rig.add(burgee);
+
+  // ── RUDDER (thin fin below the stern) ──
+  const rudderShape = new THREE.Shape();
+  rudderShape.moveTo(0, 0);
+  rudderShape.lineTo(0.04, 0);
+  rudderShape.lineTo(0.20, -0.42);
+  rudderShape.lineTo(0.12, -0.46);
+  rudderShape.lineTo(0, 0);
+  const rudderGeo = new THREE.ExtrudeGeometry(rudderShape, { depth:0.05, bevelEnabled:false });
+  rudderGeo.translate(0,0,-0.025);
+  const rudder = new THREE.Mesh(rudderGeo, hullMat);
+  rudder.position.set(-1.22, -0.66, 0);
+  boat.add(rudder);
+
+  // ── BOW PULPIT RAIL (subtle deck detail) ──
+  const railPts = [
+    new THREE.Vector3(1.42, 0.06, 0.0), new THREE.Vector3(1.18, 0.22, 0.12),
+    new THREE.Vector3(1.42, 0.06, 0.0), new THREE.Vector3(1.18, 0.22, -0.12),
+  ];
+  const rail = new THREE.LineSegments(
+    new THREE.BufferGeometry().setFromPoints(railPts),
+    new THREE.LineBasicMaterial({ color:0xC6C6DC, transparent:true, opacity:0.35 })
+  );
+  boat.add(rail);
+
+  // ── INTERACTION ──
+  let targetRotY=0, targetRotX=0, currentRotY=0, currentRotX=0;
+  window.addEventListener('mousemove', e => {
+    const mx=(e.clientX/window.innerWidth -0.5)*2;
+    const my=(e.clientY/window.innerHeight-0.5)*2;
+    targetRotY =  mx*0.26;
+    targetRotX = -my*0.06;
+  });
+  let scrollY=0;
+  window.addEventListener('scroll', () => { scrollY=window.scrollY; });
+
+  // ── ANIMATE ──
+  const clock = new THREE.Clock();
+  const pos = oceanGeo.attributes.position;
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    // layered ocean swell — broad rollers + fine chop for detailed waves
+    for (let i=0;i<pos.count;i++){
+      const x=pos.getX(i), z=pos.getZ(i);
+      const w = Math.sin(x*0.40 + t*0.8)*0.30
+              + Math.sin(z*0.50 + t*0.6)*0.22
+              + Math.sin((x+z)*0.30 + t*1.0)*0.14
+              + Math.sin(x*0.95 - z*0.35 + t*1.3)*0.075
+              + Math.sin(x*1.75 + z*0.55 + t*1.9)*0.05
+              + Math.sin(z*2.15 - x*0.45 + t*2.3)*0.034
+              + Math.sin((x*0.7 - z*1.4) + t*2.8)*0.022;
+      pos.setY(i, w);
+    }
+    pos.needsUpdate = true;
+    oceanGeo.computeVertexNormals();
+
+    // moonglade shimmer
+    reflTex.offset.y = t*0.05;
+    reflection.material.opacity = 0.74 + Math.sin(t*1.2)*0.14;
+    galReflTex.offset.y = t*0.07;
+    galReflection.material.opacity = 0.34 + Math.sin(t*0.9+2)*0.10;
+    moonReflGlow.material.opacity = 0.74 + Math.sin(t*1.4)*0.16;
+    moonReflGlow.position.x = -4.7 + Math.sin(t*0.9)*0.15;
+
+    // boat rocking on open sea
+    boat.position.x += (boatTargetX() - boat.position.x)*0.05;
+    boat.position.y = Math.sin(t*0.7)*0.12 + Math.sin(t*1.15)*0.05;
+    boat.rotation.z = Math.sin(t*0.55)*0.075 + Math.sin(t*0.93)*0.025;
+    boat.rotation.x = Math.sin(t*0.46)*0.05 + Math.sin(t*0.81)*0.02;
+
+    // twinkle
+    stars1.material.opacity = 0.78 + Math.sin(t*1.5)*0.12;
+    stars2.material.opacity = 0.62 + Math.sin(t*1.1+1)*0.12;
+    constLine.material.opacity = 0.26 + Math.sin(t*0.7)*0.06;
+    moonGlow.material.opacity = 0.88 + Math.sin(t*0.8)*0.08;
+
+    // shooting star
+    ssNext -= 0.016;
+    if (!ssActive && ssNext<=0){ triggerSS(); ssNext = 6+Math.random()*6; }
+    if (ssActive){
+      ssT += 0.016;
+      const speed=24, trail=3.4;
+      const head = ssStart.clone().add(ssDir.clone().multiplyScalar(speed*ssT));
+      const tail = head.clone().add(ssDir.clone().multiplyScalar(-trail));
+      const arr = ssGeo.attributes.position.array;
+      arr[0]=tail.x; arr[1]=tail.y; arr[2]=tail.z;
+      arr[3]=head.x; arr[4]=head.y; arr[5]=head.z;
+      ssGeo.attributes.position.needsUpdate = true;
+      const life = ssT/0.85;
+      const op = life<1 ? Math.sin(life*Math.PI) : 0;
+      ssMat.opacity = op*0.9;
+      ssHead.position.copy(head);
+      ssHead.material.opacity = op;
+      if (ssT>0.85){ ssActive=false; ssMat.opacity=0; ssHead.material.opacity=0; }
+    }
+
+    // parallax + scroll
+    currentRotY += (targetRotY-currentRotY)*0.04;
+    currentRotX += (targetRotX-currentRotX)*0.04;
+    camera.position.x = Math.sin(currentRotY)*2.5;
+    camera.position.z = 8.0 + Math.sin(currentRotY)*0.8;
+    camera.position.y = 1.55 + currentRotX*1.5;
+    const sf = Math.min(scrollY/600, 1);
+    camera.position.z += sf*4;
+    camera.position.y += sf*1.5;
+    camera.lookAt(0, 0.12, 0);
+
+    // remove orbiting glow — violet light now sits softly on the sails (static)
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+/* ═══════════════════════════════════════════════
+   SCROLL REVEAL
+   ═══════════════════════════════════════════════ */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Animate mastery bars
+      const bar = e.target.querySelector('.m-bar-fill[data-width]');
+      if (bar) setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 100);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => {
+  // Set bars to 0 initially
+  const bar = el.querySelector('.m-bar-fill[data-width]');
+  if (bar) bar.style.width = '0%';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
